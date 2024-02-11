@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<header>
+	<!-- 
+	Authenticated username:
+        <spam sec:authentication="name"></spam>
+        Authenticated user roles:
+        <spam sec:authentication="principal.authorities"></spam>
+<spam sec:authorize="hasRole('ROLE_CLIENTE')">Eres un CLIENTE</spam>
+	<spam sec:authorize="hasRole('ROLE_ADMINISTRADOR')">Eres un ADMON</spam>
+	<spam sec:authorize="hasRole('ROLE_GESTOR')">Eres un GESTOR</spam>
+-->
+
+
+</header>
+	<div style="display:flex; justify-content:space-evenly; padding:100px">
+	<form action="/login" method="post">
+		<h1 class="text-primary">Iniciar Session</h1>
+			<div class="form-outline mb-4">
+    		<input id="form2Example1" class="form-control" name="username">
+    		<label class="form-label" >Usuario</label>
+  		</div>
+
+  <!-- Password input -->
+  		<div class="form-outline mb-4">
+    		<input type="password" id="form2Example2" class="form-control" name="password">
+    		<label class="form-label"  >Password</label>
+  		</div>
+
+  <!-- Submit button -->
+  		<div style="display:flex; gap:5px">
+  			<button style="flex:1 1 auto" type="Submit" class="btn btn-primary btn-block mb-4">Entrar</button>
+  			<a th:href="@{/}">
+  			
+  			<input style="flex:1 1 auto" type="button" class="btn btn-primary btn-block mb-4" value="Volver a Home">
+  			</a>
+		</div>
+		
+  <!-- Register buttons -->
+  <div class="text-center">
+    <p>No Eres Usuario? <a th:href="@{/signup}">Registrate</a></p>
+  </div>
+  	<div style="color:red">
+  	  	<span th:if="${param.error != null}"> Usuario o Password Incorrectos</span>
+  	</div>
+  	<div style="color:white; background-color:green">
+  		<span th:text="${mensajelogout}"></span>
+  	</div>
+</form>
+</div>
+
+
+	</body>
+</html>

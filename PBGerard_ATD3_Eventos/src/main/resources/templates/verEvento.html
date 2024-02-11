@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<header>
+	<!-- 
+	Authenticated username:
+        <spam sec:authentication="name"></spam>
+        Authenticated user roles:
+        <spam sec:authentication="principal.authorities"></spam>
+<spam sec:authorize="hasRole('ROLE_CLIENTE')">Eres un CLIENTE</spam>
+	<spam sec:authorize="hasRole('ROLE_ADMINISTRADOR')">Eres un ADMON</spam>
+	<spam sec:authorize="hasRole('ROLE_GESTOR')">Eres un GESTOR</spam>
+-->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	
+  <a class="navbar-brand" th:href="@{/}">RealFUN</a>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul  class="navbar-nav">
+    
+      <li   class="nav-item">
+        <a class="nav-link" th:href="@{/eventos/destacados}">Eventos Destacados</a>
+      </li>
+  
+
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/eventos/activos}">Eventos Activos</a>
+      </li>
+       
+      
+      <li sec:authorize="hasAnyRole('ROLE_CLIENTE','ROLE_GESTOR','ROLE_ADMINISTRADOR')" class="nav-item">
+        <a class="nav-link" th:href="@{/listaEventos}">Lista De Eventos</a>
+      </li>
+         
+       
+      <li sec:authorize="hasAnyRole('ROLE_CLIENTE','ROLE_GESTOR','ROLE_ADMINISTRADOR')" class="nav-item">
+        <a class="nav-link" th:href="@{/misReservas}">Mis Reservas<a/>
+      </li>
+      
+       <li sec:authorize="hasAnyRole('ROLE_CLIENTE','ROLE_GESTOR','ROLE_ADMINISTRADOR')" class="nav-item">
+        <a class="nav-link" th:href="@{/miUsuario}">Mi Usuario<a/>
+      </li>
+      
+    </ul>
+     </div>  
+      <spam>Bienvenido/a <span sec:authorize="isAuthenticated()" th:text="${session.usuario.nombre}"></span>
+      					<span sec:authorize="!isAuthenticated()"> Nuevo Usuario</span>
+      </spam>
+	<ul class="nav justify-content-end">
+      <li  sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link"
+							th:href="@{/login}">Iniciar Sesion</a></li>
+		<li  sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link"
+			th:href="@{/signup}">Registrarse</a></li>
+	
+		<li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link"
+				th:href="@{/logout}">Cerrar Sesion</a></li>	 
+    </ul>
+  
+</nav>
+</header>
+
+	<h1 class="text-primary" style="text-align:center">Información del Evento</h1>
+	<br>
+	<br>
+	<div style="display:flex; justify-content:space-evenly" >
+		<div>
+			<form th:object="${evento}">
+			<label class="navbar-brand">Nombre: </label>
+			<label  class="nav-item" th:text="*{nombre}"></label><hr>
+			<label class="navbar-brand">Descripcion: </label>
+			<label  class="nav-item" th:text="*{descripcion}"></label><hr>
+			<label class="navbar-brand">Fecha Inicio: </label>
+			<label  class="nav-item" th:text="*{fechaInicio}"></label><hr>
+			<label class="navbar-brand">Duración: </label>
+			<label  class="nav-item" th:text="*{duracion}"></label><hr>
+			<label class="navbar-brand">Dirección: </label>
+			<label  class="nav-item" th:text="*{direccion}"></label><hr>
+			<label class="navbar-brand">Aforo Maximo: </label>
+			<label  class="nav-item" th:text="*{aforoMaximo}"></label><hr>
+			<label class="navbar-brand">Minima Asistencia: </label>
+			<label  class="nav-item" th:text="*{minimoAsistencia}"></label><hr>
+			<label class="navbar-brand">Precio: </label>
+			<label  class="nav-item" th:text="*{precio}"></label><hr>
+			</form>
+		</div>
+		<div sec:authorize="isAuthenticated()">
+			<form th:action="@{/reservas/{id} (id=${evento.idEvento})}" th:object="${reserva}" method="post" style="text-align:center">
+				<label >10 Entradas Maximo Por Evento</label><br>
+				<label >Cantidad que me quedan por reservar</label><br>
+				<label th:text="*{cantidad}" style="margin-bottom:130px"></label><br>
+				<label>Cantidad de Entradas</label>
+				<select name="entradas" style="margin-bottom:130px">
+					<option value=0>0</option>
+					<option value=1>1</option>
+					<option value=2>2</option>
+					<option value=3>3</option>
+					<option value=4>4</option>
+					<option value=5>5</option>
+					<option value=6>6</option>
+					<option value=7>7</option>
+					<option value=8>8</option>
+					<option value=9>9</option>
+					<option value=10>10</option>
+				</select><br>
+				<div style="text-align:center">
+				<input type="submit" class="btn btn-primary " value="Reservar" style="margin-bottom:90px">
+				</div>
+			</form>
+			<br>
+			<div style="text-align:center; color:blue">
+			<h3 th:text="${precio}"></h3>
+			</div>
+			<br>
+			<div style="text-align:center; color:green">
+			<span th:text="${mensaje}"></span>
+			</div>
+			<div style="text-align:center; color:red">
+			<span th:text="${mensajeError}"></span>
+			</div>
+			
+		</div>
+	</div>
+	<br>
+	<br>
+<div style="text-align:center">
+<a class="navbar-brand" th:href="@{/eventos/activos}" >
+	<input  type="button" class="btn btn-primary " value="Volver a Eventos Activos">
+</a>
+<a class="navbar-brand" th:href="@{/eventos/destacados}" >
+	<input  type="button" class="btn btn-primary " value="Volver a Eventos Destacados">
+</a>
+</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	</body>
+</html>
